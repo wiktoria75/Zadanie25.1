@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import java.time.LocalDate;
 
 @Entity
-public class Task {
+public class Task implements Comparable<Task> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +31,13 @@ public class Task {
     private Boolean completed;
 
     public Task() {
+        this.completed = false;
+    }
+
+    public Task(LocalDate startDate, LocalDate deadlineDate, String name) {
+        this.startDate = startDate;
+        this.deadlineDate = deadlineDate;
+        this.name = name;
     }
 
     public Task(LocalDate startDate, LocalDate endDate, LocalDate deadlineDate, String name, Boolean completed) {
@@ -40,6 +47,8 @@ public class Task {
         this.name = name;
         this.completed = completed;
     }
+
+
 
 
 
@@ -91,4 +100,13 @@ public class Task {
         this.completed = completed;
     }
 
+    @Override
+    public int compareTo(Task task) {
+        if (this.deadlineDate.isAfter(task.deadlineDate)) {
+            return 1;
+        } else if (this.deadlineDate.isBefore(task.deadlineDate)) {
+            return -1;
+        }
+        return 0;
+    }
 }
