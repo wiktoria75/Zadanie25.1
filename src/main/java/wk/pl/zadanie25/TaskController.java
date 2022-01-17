@@ -49,7 +49,7 @@ public class TaskController {
     @PostMapping("/save")
     String save(Task task) {
         taskRepository.save(task);
-        return "lista";
+        return "redirect:/";
     }
 
     @GetMapping("/finished")
@@ -61,7 +61,7 @@ public class TaskController {
             task.setEndDate(LocalDate.now());
             taskRepository.save(task);
         }
-        return "redirect:/list";
+        return "redirect:/";
     }
 
 

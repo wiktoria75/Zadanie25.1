@@ -27,11 +27,11 @@ public class Task implements Comparable<Task> {
 
     private String name;
 
-    @BooleanFlag
     private Boolean completed;
 
     public Task() {
         this.completed = false;
+        this.startDate = LocalDate.now();
     }
 
     public Task(LocalDate startDate, LocalDate deadlineDate, String name) {
