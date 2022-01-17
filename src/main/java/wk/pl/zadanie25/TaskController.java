@@ -5,16 +5,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class TaskController {
 
-    private TaskRepository taskRepository;
+    private TaskService taskService;
 
-    public TaskController(TaskRepository taskRepository) {
-        this.taskRepository = taskRepository;
+    public TaskController(TaskService taskService) {
+        this.taskService = taskService;
     }
 
     @GetMapping("/new")
@@ -25,44 +23,32 @@ public class TaskController {
 
     @GetMapping("/edit")
     String form(@RequestParam Long id, Model model) {
-        Optional<Task> byId = taskRepository.findById(id);
-        byId.ifPresent(task -> model.addAttribute("task", task));
+        model.addAttribute("task", taskService.findTaskById(id));
         return "form";
     }
 
     @GetMapping("/")
     String list(Model model) {
-        List<Task> tasksOverdue = taskRepository.findAllByCompletedFalseAndDeadlineDateIsBefore(LocalDate.now());
-        List<Task> tasks = taskRepository.findAllByCompletedFalseAndDeadlineDateIsAfter(LocalDate.now());
-        tasksOverdue.sort(Task::compareTo);
-        tasks.sort(Task::compareTo);
-        model.addAttribute("listOverdue", tasksOverdue);
-        model.addAttribute("list", tasks);
-        return "lista";
+        model.addAttribute("list", taskService.findTaskByCompleted(false));
+        model.addAttribute("today", LocalDate.now());
+        return "list";
     }
+
     @GetMapping("/archive")
     String archive(Model model) {
-        model.addAttribute("tasks", taskRepository.findAllByCompletedTrue());
+        model.addAttribute("tasks", taskService.findTaskByCompleted(true));
         return "archive";
     }
 
     @PostMapping("/save")
     String save(Task task) {
-        taskRepository.save(task);
+        taskService.saveTask(task);
         return "redirect:/";
     }
 
     @GetMapping("/finished")
     String check(@RequestParam Long id) {
-        Optional<Task> byId = taskRepository.findById(id);
-        if (byId.isPresent()) {
-            Task task = byId.get();
-            task.setCompleted(true);
-            task.setEndDate(LocalDate.now());
-            taskRepository.save(task);
-        }
+        taskService.saveTaskAsCompleted(id);
         return "redirect:/";
     }
-
-
 }

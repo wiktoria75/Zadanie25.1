@@ -19,7 +19,7 @@ public class Task implements Comparable<Task> {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
 
-    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")

@@ -7,7 +7,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
           crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="style.css"></head>
 <body>
 
 <div layout:fragment="content">
@@ -18,17 +17,17 @@
         <thead>
         <tr>
             <th scope="col">Odznacz</th>
+            <th scope="col">Edytuj</th>
             <th scope="col">Deadline</th>
             <th scope="col">Nazwa</th>
             <th scope="col">Data rozpoczęcia</th>
-            <th scope="col">Edytuj</th>
 <!--            dwa poniższe zostawiam na potrzebę testowania-->
             <th scope="col">Zrobione</th>
             <th scope="col">Data zakończenia</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="task:${listOverdue}" style="color: red" >
+        <tr th:each="task:${list}" th:style="|color: ${task.deadlineDate.isBefore(today) ? 'red' : 'black'}|" >
             <th>
                 <a th:href="|/finished?id=${task.id}|" th:text="Zrobione"></a>
             </th>
@@ -41,20 +40,6 @@
             <td th:text="${task.completed}"></td>
             <td th:text="${task.endDate}"></td>
         </tr>
-        <tr th:each="task:${list}" >
-            <th>
-                <a th:href="|/finished?id=${task.id}|" th:text="Zrobione"></a>
-            </th>
-            <th>
-                <a th:href="|/edit?id=${task.id}|" th:text="Edytuj"></a>
-            </th>
-            <td  th:text="${task.deadlineDate}"></td>
-            <td th:text="${task.name}"></td>
-            <td th:text="${task.startDate}"></td>
-            <td th:text="${task.completed}"></td>
-            <td th:text="${task.endDate}"></td>
-        </tr>
-        </tbody>
     </table>
 
 </div>
